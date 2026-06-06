@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getApiKey } from "@/lib/api-key-storage";
+import { getApiKeyHeaders } from "@/lib/api-key-storage";
 import { debugLog } from "@/lib/utils/debug";
 import type { Course, Step } from "@/lib/types";
 
@@ -242,8 +242,6 @@ export function useCourseNavigation(
         setGradingErrorCode(null);
 
         try {
-          const apiKey = getApiKey();
-
           const requestBody = {
             userAnswer: userAnswer as string,
             correctAnswer: data.answer as string,
@@ -254,10 +252,8 @@ export function useCourseNavigation(
 
           const headers: Record<string, string> = {
             "Content-Type": "application/json",
+            ...getApiKeyHeaders(),
           };
-          if (apiKey) {
-            headers["X-Together-API-Key"] = apiKey;
-          }
 
           const response = await fetch("/api/grade-short-answer", {
             method: "POST",

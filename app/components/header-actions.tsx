@@ -6,7 +6,7 @@ import { BookOpen, KeyRound, Star } from "lucide-react";
 import { useCredits } from "../hooks/use-credits";
 import { ApiKeyDialog } from "./api-key-dialog";
 import { Button, buttonVariants } from "./ui/button";
-import { getApiKey } from "@/lib/api-key-storage";
+import { hasAnyApiKey } from "@/lib/api-key-storage";
 
 const API_KEY_CHANGE_EVENT = "api-key-storage-change";
 
@@ -27,7 +27,7 @@ function subscribeToApiKeyChanges(onStoreChange: () => void) {
 }
 
 function getApiKeyPresence() {
-  return !!getApiKey();
+  return hasAnyApiKey();
 }
 
 function getServerApiKeyPresence() {

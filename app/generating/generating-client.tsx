@@ -6,7 +6,7 @@ import { upload } from "@vercel/blob/client";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import { Loader } from "@/components/ai-elements/loader";
-import { getApiKey } from "@/lib/api-key-storage";
+import { getApiKey, getApiKeyHeaders } from "@/lib/api-key-storage";
 import { getPendingFile } from "@/lib/utils/indexed-db-storage";
 import { getOrCreateUserId } from "@/lib/utils/session";
 import { HeaderActions } from "../components/header-actions";
@@ -129,7 +129,6 @@ export function GeneratingPageContent() {
     setLastUpload({ url, fileName });
 
     try {
-      const apiKey = getApiKey();
       const userId = getOrCreateUserId();
 
       const formData = new FormData();
@@ -137,10 +136,8 @@ export function GeneratingPageContent() {
 
       const headers: Record<string, string> = {
         "X-User-ID": userId,
+        ...getApiKeyHeaders(),
       };
-      if (apiKey) {
-        headers["X-Together-API-Key"] = apiKey;
-      }
 
       const enqueueResponse = await fetch("/api/generate-course", {
         method: "POST",
